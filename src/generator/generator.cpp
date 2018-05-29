@@ -1,7 +1,7 @@
 #include "generator.h"
 
 generator::generator() : rng(time(nullptr)) {
-	source = new dummysource;
+	source = new vector_source("../data/foods.txt");
 }
 
 int generator::get_random_index() {

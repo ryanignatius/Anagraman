@@ -19,6 +19,10 @@ bool problem::check(std::string test) {
 	return ground == test;
 }
 
+std::string problem::get_ground() {
+	return ground;
+}
+
 std::string problem::get_scrambled() {
 	return scrambled;
 }

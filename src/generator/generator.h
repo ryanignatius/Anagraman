@@ -1,5 +1,5 @@
 #pragma once
-#include "source/dummysource.h"
+#include "source/vector_source.h"
 #include "problem.h"
 #include <random>
 

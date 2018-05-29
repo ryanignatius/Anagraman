@@ -12,5 +12,6 @@ class problem {
 	problem(std::string);
 	void rescramble();
 	bool check(std::string);
+	std::string get_ground();
 	std::string get_scrambled();
 };
