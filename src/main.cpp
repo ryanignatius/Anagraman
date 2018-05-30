@@ -94,13 +94,19 @@ private:
     void sendReply(std::string sender, std::string reply) {
         json j = {
             {"messaging_type", "response"},
-            {"recipient", sender},
+            {"recipient", {
+                {"id", sender}
+            }},
             {"message",{
                 {"text", reply}
             }}
         };
+        std::cout << "response: " << j.dump() << std::endl;
         std::cout << "response: " << j.dump(4) << std::endl;
-        client.post(ENDPOINT).body(j.dump()).send();
+        client.post(ENDPOINT)
+              .header(std::make_shared<Http::Header::ContentType>(MIME(Application, Json)))
+              .body(j.dump())
+              .send();
     }
 };
 
