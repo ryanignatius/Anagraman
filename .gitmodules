@@ -1,0 +1,3 @@
+[submodule "restclient-cpp"]
+	path = restclient-cpp
+	url = git@github.com:mrtazz/restclient-cpp.git
