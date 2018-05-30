@@ -8,6 +8,9 @@
 
 #include "json.hpp"
 
+#include "restclient-cpp/connection.h"
+#include "restclient-cpp/restclient.h"
+
 using json = nlohmann::json;
 using namespace std;
 using namespace Pistache;
@@ -19,10 +22,7 @@ public:
     { }
 
     void init(size_t thr = 2) {
-        auto clientOpts = Http::Client::options()
-            .threads(1)
-            .maxConnectionsPerHost(8);
-        client.init(clientOpts);
+        RestClient::init();
         auto opts = Http::Endpoint::options()
             .threads(thr)
             .flags(Tcp::Options::InstallSignalHandler | Tcp::Options::ReuseAddr);
@@ -36,6 +36,7 @@ public:
     }
 
     void shutdown() {
+        RestClient::disable();
         httpEndpoint->shutdown();
     }
 
@@ -43,7 +44,6 @@ private:
     std::string ENDPOINT = "https://graph.facebook.com/v2.6/me/messages?access_token=EAACaA7moyIUBANyaZCyAmQpZCeLoPViwS46dniLZCMSU2bU1ZC3SvWcKrfMECUwPvLy7ZBZBVSfI6iiRsL9ZCYKZB3Gi77ZAlZATU2ZAjSZA5XsdWZBGJv1Bynkpb7Eej7hLEjLHCrbmOoU6EkZCZC2a03TI2pjQZCm45QKGKkUKhYmYHm8I4iSs0660ZBSqi";
     std::shared_ptr<Http::Endpoint> httpEndpoint;
     Rest::Router router;
-    Http::Client client;
 
     void setupRoutes() {
         using namespace Rest;
@@ -103,10 +103,7 @@ private:
         };
         std::cout << "response: " << j.dump() << std::endl;
         std::cout << "response: " << j.dump(4) << std::endl;
-        client.post(ENDPOINT)
-              .header(std::make_shared<Http::Header::ContentType>(MIME(Application, Json)))
-              .body(j.dump())
-              .send();
+        RestClient::post(ENDPOINT, "application/json", j.dump());
     }
 };
 
