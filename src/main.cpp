@@ -1,24 +1,13 @@
-#include <algorithm>
-
-#include <pistache/http.h>
-#include <pistache/router.h>
-#include <pistache/endpoint.h>
-#include <pistache/client.h>
-#include <pistache/stream.h>
-
 #include "json.hpp"
 #include "crow_all.h"
-
 #include "restclient-cpp/connection.h"
 #include "restclient-cpp/restclient.h"
 
 using json = nlohmann::json;
-using namespace std;
-using namespace Pistache;
 
 const std::string ENDPOINT = "https://graph.facebook.com/v2.6/me/messages?access_token=EAACaA7moyIUBANyaZCyAmQpZCeLoPViwS46dniLZCMSU2bU1ZC3SvWcKrfMECUwPvLy7ZBZBVSfI6iiRsL9ZCYKZB3Gi77ZAlZATU2ZAjSZA5XsdWZBGJv1Bynkpb7Eej7hLEjLHCrbmOoU6EkZCZC2a03TI2pjQZCm45QKGKkUKhYmYHm8I4iSs0660ZBSqi";
 
-void sendReply(std::string sender, std::string reply) {
+void sendReply(const std::string& sender, const std::string& reply) {
     json j = {
         {"messaging_type", "response"},
         {"recipient", {
@@ -28,8 +17,6 @@ void sendReply(std::string sender, std::string reply) {
             {"text", reply}
         }}
     };
-    std::cout << "response: " << j.dump() << std::endl;
-    std::cout << "response: " << j.dump(4) << std::endl;
     RestClient::post(ENDPOINT, "application/json", j.dump());
 }
 
