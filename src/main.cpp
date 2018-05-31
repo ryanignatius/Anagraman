@@ -1,3 +1,6 @@
+#include <unordered_map>
+#include <algorithm>
+#include "generator/generator.h"
 #include "json.hpp"
 #include "crow_all.h"
 #include "restclient-cpp/connection.h"
@@ -6,6 +9,10 @@
 using json = nlohmann::json;
 
 const std::string ENDPOINT = "https://graph.facebook.com/v2.6/me/messages?access_token=EAACaA7moyIUBANyaZCyAmQpZCeLoPViwS46dniLZCMSU2bU1ZC3SvWcKrfMECUwPvLy7ZBZBVSfI6iiRsL9ZCYKZB3Gi77ZAlZATU2ZAjSZA5XsdWZBGJv1Bynkpb7Eej7hLEjLHCrbmOoU6EkZCZC2a03TI2pjQZCm45QKGKkUKhYmYHm8I4iSs0660ZBSqi";
+
+std::unordered_map<std::string, int> userStates;
+std::unordered_map<std::string, problem> userProblems;
+generator mgenerator;
 
 void sendReply(const std::string& sender, const std::string& reply) {
     json j = {
@@ -18,6 +25,32 @@ void sendReply(const std::string& sender, const std::string& reply) {
         }}
     };
     RestClient::post(ENDPOINT, "application/json", j.dump());
+}
+
+std::string getReply(const std::string& sender, const std::string& text) {
+    if (text == "/play") {
+        userStates[sender] = 1;
+        problem prob = mgenerator.get_problem();
+        userProblems[sender] = prob;
+        std::cout << prob.get_ground() << std::endl;
+        std::cout << prob.get_scrambled() << std::endl;
+        return prob.get_scrambled();
+    }
+
+    int userState = userStates[sender];
+    if (userState == 0) {
+        return "Hello.. Please type '/play' to start playing..";
+    } else if (userState == 1) {
+        problem prob = userProblems[sender];
+        if (prob.check(text)) {
+            // correct
+            userStates[sender] = 0;
+            return "Correct! Congratulations!";
+        } else {
+            // wrong
+            return "Wrong.. Please try again..";
+        }
+    }
 }
 
 void respondMessage(const json& j) {
@@ -35,7 +68,9 @@ void respondMessage(const json& j) {
     if (!messaging.count("message")) return;
     json message = messaging["message"];
     if (!message.count("text")) return;
-    sendReply(sender["id"], message["text"]);
+    std::cout << "text: " << message["text"] << std::endl;
+    std::string reply = getReply(sender["id"], message["text"]);
+    sendReply(sender["id"], reply);
 }
 
 crow::response handleGet(const crow::request& req) {

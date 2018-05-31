@@ -9,6 +9,7 @@ class problem {
 	std::string scramble();
 
 	public:
+	problem();
 	problem(std::string);
 	void rescramble();
 	bool check(std::string);

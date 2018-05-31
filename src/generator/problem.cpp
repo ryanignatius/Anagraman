@@ -1,5 +1,7 @@
 #include "problem.h"
 
+problem::problem() {}
+
 problem::problem(std::string ground) {
 	this->ground = ground;
 	rescramble();
