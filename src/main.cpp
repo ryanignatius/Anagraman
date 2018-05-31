@@ -7,6 +7,7 @@
 #include <pistache/stream.h>
 
 #include "json.hpp"
+#include "crow_all.h"
 
 #include "restclient-cpp/connection.h"
 #include "restclient-cpp/restclient.h"
@@ -107,29 +108,63 @@ private:
     }
 };
 
-int main(int argc, char *argv[]) {
-    Port port(9080);
+/*
+void handleGet(const crow::SimpleApp& app) {
+    CROW_ROUTE(app, "/facebook")
+    ([](const crow::request& req){
+        std::ostringstream os;
 
-    int thr = 1;
+        // To get a simple string from the url params
+        // To see it in action /params?foo='blabla'
+        os << "Params: " << req.url_params << "\n\n"; 
+        os << "The key 'foo' was " << (req.url_params.get("foo") == nullptr ? "not " : "") << "found.\n";
 
-    if (argc >= 2) {
-        port = std::stol(argv[1]);
+        // To get a double from the request
+        // To see in action submit something like '/params?pew=42'
+        if(req.url_params.get("pew") != nullptr) {
+            double countD = boost::lexical_cast<double>(req.url_params.get("pew"));
+            os << "The value of 'pew' is " <<  countD << '\n';
+        }
 
-        if (argc == 3)
-            thr = std::stol(argv[2]);
+        // To get a list from the request
+        // You have to submit something like '/params?count[]=a&count[]=b' to have a list with two values (a and b)
+        auto count = req.url_params.get_list("count");
+        os << "The key 'count' contains " << count.size() << " value(s).\n";
+        for(const auto& countVal : count) {
+            os << " - " << countVal << '\n';
+        }
+
+        // To get a dictionary from the request
+        // You have to submit something like '/params?mydict[a]=b&mydict[abcd]=42' to have a list of pairs ((a, b) and (abcd, 42))
+        auto mydict = req.url_params.get_dict("mydict");
+        os << "The key 'dict' contains " << mydict.size() << " value(s).\n";
+        for(const auto& mydictVal : mydict) {
+            os << " - " << mydictVal.first << " -> " << mydictVal.second << '\n';
+        }
+
+        return crow::response{os.str()};
+    });
+
+    std::cout << "get request from facebook" << std::endl;
+    auto mode = request.query().get("hub.mode").getOrElse("");
+    auto challenge = request.query().get("hub.challenge").getOrElse("");
+    auto token = request.query().get("hub.verify_token").getOrElse("");
+    if (token == "anagraman") {
+        response.send(Http::Code::Ok, challenge);
+    } else {
+        response.send(Http::Code::Ok, "Invalid Token");
     }
+}
+*/
 
-    Address addr(Ipv4::any(), port);
+int main(int argc, char *argv[]) {
+    crow::SimpleApp app;
 
-    cout << "Cores = " << hardware_concurrency() << endl;
-    cout << "Using " << thr << " threads" << endl;
+    CROW_ROUTE(app, "/")([](){
+        return "Hello world";
+    });
 
-    StatsEndpoint stats(addr);
-
-    stats.init(thr);
-    stats.start();
-
-    stats.shutdown();
+    app.port(9080).multithreaded().run();
     return 0;
 }
 
