@@ -9,10 +9,53 @@
 using json = nlohmann::json;
 
 const std::string ENDPOINT = "https://graph.facebook.com/v2.6/me/messages?access_token=EAACaA7moyIUBANyaZCyAmQpZCeLoPViwS46dniLZCMSU2bU1ZC3SvWcKrfMECUwPvLy7ZBZBVSfI6iiRsL9ZCYKZB3Gi77ZAlZATU2ZAjSZA5XsdWZBGJv1Bynkpb7Eej7hLEjLHCrbmOoU6EkZCZC2a03TI2pjQZCm45QKGKkUKhYmYHm8I4iSs0660ZBSqi";
+const std::string SLACK_ENDPOINT = "https://slack.com";
+const std::string SLACK_TOKEN = "xoxb-4767970651-373663936705-GoKhJSXhjpTX06EO27TQtW5L";
 
 std::unordered_map<std::string, int> userStates;
 std::unordered_map<std::string, problem> userProblems;
 generator mgenerator;
+
+void sendMessageSlack(const std::string& channel, const std::string& text) {
+	json j = {
+		{ "channel", channel },
+		{ "text", text }
+	};
+	std::cout << j.dump() << std::endl;
+	RestClient::Connection* conn = new RestClient::Connection(SLACK_ENDPOINT);
+	conn->AppendHeader("Content-Type", "application/json; charset=utf-8");
+	conn->AppendHeader("Authorization", "Bearer " + SLACK_TOKEN);
+	RestClient::Response resp = conn->post("/api/chat.postMessage", j.dump());
+	std::cout << resp.body << std::endl;
+}
+
+std::string getReplySlack(const std::string& sender, const std::string& text) {
+    if (text == "//play") {
+        userStates[sender] = 1;
+        problem prob = mgenerator.get_problem();
+        userProblems[sender] = prob;
+        std::cout << prob.get_ground() << std::endl;
+        std::cout << prob.get_scrambled() << std::endl;
+        return prob.get_scrambled();
+    }
+
+    int userState = userStates[sender];
+    if (userState == 0) {
+		return "";
+        // return "Hello.. Please type '/play' to start playing..";
+    } else if (userState == 1) {
+        problem prob = userProblems[sender];
+        if (prob.check(text)) {
+            // correct
+            userStates[sender] = 0;
+            return "Correct! Congratulations!";
+        } else {
+            // wrong
+			return "";
+            // return "Wrong.. Please try again..";
+        }
+    }
+}
 
 void sendReply(const std::string& sender, const std::string& reply) {
     json j = {
@@ -28,7 +71,7 @@ void sendReply(const std::string& sender, const std::string& reply) {
 }
 
 std::string getReply(const std::string& sender, const std::string& text) {
-    if (text == "/play") {
+    if (text == "//play") {
         userStates[sender] = 1;
         problem prob = mgenerator.get_problem();
         userProblems[sender] = prob;
@@ -101,6 +144,26 @@ crow::response handlePost(const crow::request& req) {
     return crow::response(200);
 }
 
+crow::response handlePostSlack(const crow::request& req) {
+	json j = json::parse(req.body);
+	std::cout << j.dump() << std::endl;
+
+	if (j.count("challenge")) {
+		std::string challenge = j["challenge"];
+		return crow::response(challenge);
+	} else {
+		json event = j["event"];
+		if (event.count("bot_id")) {
+			return crow::response(200);
+		}
+		std::string reply = getReplySlack(event["user"], event["text"]);
+		if (reply.size()) {
+			sendMessageSlack(event["channel"], reply);
+		}
+		return crow::response(200);
+	}
+}
+
 int main(int argc, char *argv[]) {
     RestClient::init();
     crow::SimpleApp app;
@@ -117,6 +180,16 @@ int main(int argc, char *argv[]) {
             return crow::response(405);
         }
     });
+
+	CROW_ROUTE(app, "/slack").methods(crow::HTTPMethod::Get, crow::HTTPMethod::Post)
+	([](const crow::request& req) {
+		if (req.method == crow::HTTPMethod::Post) {
+			std::cout << "New slack message" << std::endl;
+			return handlePostSlack(req);
+		} else {
+			return crow::response(405);
+		}
+	});
 
     app.port(9080).multithreaded().run();
     return 0;
