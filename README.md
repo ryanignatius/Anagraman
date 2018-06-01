@@ -1,7 +1,20 @@
 # Anagraman
 
-Anagram bot game by SJK dan RJK
+Anagram bot game
+
+## Instruction
+
+- Get all the dependencies
+- `git clone`
+- `git submodule update --init`
+- `cd restclient-cpp && ./autogen.sh && ./configure && make install && cd ..`
+- `make main`
+
+## Dependencies
+
+- libcurl `apt install libcurl4-openssl-dev`
+- boost `apt install libboost-all-dev`
 
 ## Compilation
 
-`g++ -o main main.cpp generator/generator.cpp generator/problem.cpp generator/source/vector_source.cpp -std=c++11 -lrestclient-cpp -lpthread -lboost_system`
+Look them up at Makefile
