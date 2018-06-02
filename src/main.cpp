@@ -61,29 +61,29 @@ std::vector<std::string> getReplySlack(const json& event) {
 		slackPlayers[user_id] = name;
 	}
 
-	if (text == "//help") {
+	if (text == "$help") {
 		std::ostringstream sout;
-		sout << "`//help` to show this help message\n";
-		sout << "`//play` to start\n";
-		sout << "`//rescramble` to rescramble the question\n";
-		sout << "`//skip` to change the question\n";
-		sout << "`//leaderboard` to show the leaderboard\n";
-		sout << "`//end` to end the game\n";
-		sout << "`//status to check whether there is a game\n";
+		sout << "`$help` to show this help message\n";
+		sout << "`$play` to start\n";
+		sout << "`$rescramble` to rescramble the question\n";
+		sout << "`$skip` to change the question\n";
+		sout << "`$leaderboard` to show the leaderboard\n";
+		sout << "`$end` to end the game\n";
+		sout << "`$status` to check whether there is a game\n";
 		sout << "Non-alphanumerics are ignored, so both `esteler` and `es teler` would be a correct answer for `seteler`\n";
 		return { sout.str() };
 	}
 
-	if (text == "//play") {
+	if (text == "$play") {
 		if (games.find(key) == games.end()) {
 			games[key] = game();
 			return { "Hi I'm Anagraman! Let's play", games[key].get_problem() };
 		} else {
-			return { "There is a running session, send me `//end` to end the game or `//skip` if you want to change the question" };
+			return { "There is a running session, send me `$end` to end the game or `$skip` if you want to change the question" };
 		}
 	}
 
-	if (text == "//status") {
+	if (text == "$status") {
 		if (games.find(key) == games.end()) {
 			return { "There is no game at the moment" };
 		} else {
@@ -99,21 +99,21 @@ std::vector<std::string> getReplySlack(const json& event) {
 		games[key].add_player(p.first, p.second);
 	}
 	
-	if (text == "//rescramble") {
+	if (text == "$rescramble") {
 		return { games[key].rescramble() };
-	} else if (text == "//skip") {
+	} else if (text == "$skip") {
 		std::ostringstream sout;
 		sout << "The answer is " << games[key].get_ground() << "\n";
 		sout << "Next:";
 		return { sout.str(), games[key].get_next_problem() };
-	} else if (text == "//leaderboard") {
+	} else if (text == "$leaderboard") {
 		std::vector<player> players = games[key].get_players();
 		std::ostringstream sout;
 		for (const player& p: players) {
 			sout << p.get_display_name() << " " << p.get_score() << "\n";
 		}
 		return { sout.str() };
-	} else if (text == "//end") {
+	} else if (text == "$end") {
 		std::vector<player> players = games[key].get_players();
 		std::ostringstream sout;
 		sout << "Cheers!\n\n";
@@ -233,7 +233,7 @@ crow::response handlePostSlack(const crow::request& req) {
 		return crow::response(challenge);
 	} else {
 		json event = j["event"];
-		if (event.count("bot_id")) {
+		if (event.count("bot_id") || event.count("hidden") || event["type"] != "message") {
 			return crow::response(200);
 		}
 		std::vector<std::string> replies = getReplySlack(event);
