@@ -69,6 +69,7 @@ std::vector<std::string> getReplySlack(const json& event) {
 		sout << "`//skip` to change the question\n";
 		sout << "`//leaderboard` to show the leaderboard\n";
 		sout << "`//end` to end the game\n";
+		sout << "`//status to check whether there is a game\n";
 		sout << "Non-alphanumerics are ignored, so both `esteler` and `es teler` would be a correct answer for `seteler`\n";
 		return { sout.str() };
 	}
@@ -82,6 +83,14 @@ std::vector<std::string> getReplySlack(const json& event) {
 		}
 	}
 
+	if (text == "//status") {
+		if (games.find(key) == games.end()) {
+			return { "There is no game at the moment" };
+		} else {
+			return { "The game is on" };
+		}
+	}
+
 	if (games.find(key) == games.end()) {
 		return { "" };
 	}
@@ -89,7 +98,7 @@ std::vector<std::string> getReplySlack(const json& event) {
 	for (auto p: slackPlayers) {
 		games[key].add_player(p.first, p.second);
 	}
-
+	
 	if (text == "//rescramble") {
 		return { games[key].rescramble() };
 	} else if (text == "//skip") {
