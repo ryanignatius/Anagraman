@@ -34,7 +34,7 @@ void sendMessageSlack(const std::string& channel, const std::string& text) {
 	std::cout << resp.body << std::endl;
 }
 
-void resolveSlackPlayer(const std::string& user_id) {
+std::string resolveSlackPlayer(const std::string& user_id) {
 	json j = {
 		{ "user", user_id },
 		{ "token", SLACK_TOKEN }
@@ -47,6 +47,7 @@ void resolveSlackPlayer(const std::string& user_id) {
 	conn->AppendHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 	RestClient::Response resp = conn->post("/api/users.info", payload);
 	std::cout << resp.body << std::endl;
+	return json::parse(resp.body)["name"];
 }
 
 std::vector<std::string> getReplySlack(const json& event) {
@@ -55,9 +56,8 @@ std::vector<std::string> getReplySlack(const json& event) {
 	std::string user_id = event["user"];
 
 	if (slackPlayers.find(user_id) == slackPlayers.end()) {
-		resolveSlackPlayer(user_id);
-		// slackPlayers[user_id] = "hehe";
-		// game.add_player(user_id, "hehe");
+		std::string name = resolveSlackPlayer(user_id);
+		slackPlayers[user_id] = name;
 	}
 
 	if (text == "//play") {
@@ -65,8 +65,14 @@ std::vector<std::string> getReplySlack(const json& event) {
 		return { games[key].get_problem() };
 	}
 
+	
+
 	if (games.find(key) == games.end()) {
 		return { "" };
+	}
+
+	for (auto p: slackPlayers) {
+		games[key].add_player(p.first, p.second);
 	}
 
 	if (text == "//leaderboard") {
@@ -85,6 +91,7 @@ std::vector<std::string> getReplySlack(const json& event) {
 			sout << p.get_display_name() << " " << p.get_score() << "\n";
 		}
 		games.erase(key);
+		slackPlayers.clear();
 		return { sout.str() };
 	}
 
