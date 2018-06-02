@@ -22,6 +22,10 @@ bool game::answer(const std::string& user_id, const std::string& guess) {
 	return true;
 }
 
+std::string game::get_ground() {
+	return current_problem.get_ground();
+}
+
 std::string game::get_next_problem() {
 	current_problem = mgenerator.get_problem();
 	return get_problem();
@@ -42,4 +46,9 @@ std::vector<player> game::get_players() {
 	});
 
 	return players;
+}
+
+std::string game::rescramble() {
+	current_problem.rescramble();
+	return current_problem.get_scrambled();
 }

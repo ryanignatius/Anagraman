@@ -62,11 +62,13 @@ std::vector<std::string> getReplySlack(const json& event) {
 	}
 
 	if (text == "//play") {
-		games[key] = game();
-		return { games[key].get_problem() };
+		if (games.find(key) == games.end()) {
+			games[key] = game();
+			return { "Hi I'm Anagraman! Let's play", games[key].get_problem() };
+		} else {
+			return { "There is a running session, send me `//end` to end the game or `//skip` if you want to change the question" };
+		}
 	}
-
-	
 
 	if (games.find(key) == games.end()) {
 		return { "" };
@@ -76,7 +78,14 @@ std::vector<std::string> getReplySlack(const json& event) {
 		games[key].add_player(p.first, p.second);
 	}
 
-	if (text == "//leaderboard") {
+	if (text == "//rescramble") {
+		return { games[key].rescramble() };
+	} else if (text == "//skip") {
+		std::ostringstream sout;
+		sout << "The answer was " << games[key].get_ground() << "\n";
+		sout << "Next:";
+		return { sout.str(), games[key].get_next_problem() };
+	} else if (text == "//leaderboard") {
 		std::vector<player> players = games[key].get_players();
 		std::ostringstream sout;
 		for (const player& p: players) {
@@ -92,7 +101,7 @@ std::vector<std::string> getReplySlack(const json& event) {
 			sout << p.get_display_name() << " " << p.get_score() << "\n";
 		}
 		games.erase(key);
-		slackPlayers.clear();
+		// slackPlayers.clear();
 		return { sout.str() };
 	}
 
