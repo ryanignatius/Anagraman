@@ -23,7 +23,8 @@ generator mgenerator;
 void sendMessageSlack(const std::string& channel, const std::string& text) {
 	json j = {
 		{ "channel", channel },
-		{ "text", text }
+		{ "text", text },
+		{ "link_names", 1 }
 	};
 
 	std::cout << j.dump() << std::endl;
@@ -47,7 +48,7 @@ std::string resolveSlackPlayer(const std::string& user_id) {
 	conn->AppendHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 	RestClient::Response resp = conn->post("/api/users.info", payload);
 	std::cout << resp.body << std::endl;
-	return json::parse(resp.body)["name"];
+	return json::parse(resp.body)["user"]["name"];
 }
 
 std::vector<std::string> getReplySlack(const json& event) {
@@ -96,8 +97,9 @@ std::vector<std::string> getReplySlack(const json& event) {
 	}
 
 	if (games[key].answer(event["user"], text)) {
+		std::string user = event["user"];
 		std::ostringstream sout;
-		sout << event["user"];
+		sout << "@" << slackPlayers[user];
 		sout << " correct!";
 		return { sout.str() , games[key].get_next_problem() };
 	}

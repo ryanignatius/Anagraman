@@ -32,7 +32,7 @@ std::string game::get_problem() {
 }
 
 std::vector<player> game::get_players() {
-	std::vector<player> players(this->players.size());
+	std::vector<player> players;
 	for (auto itplayer: this->players) {
 		players.push_back(itplayer.second);
 	}
