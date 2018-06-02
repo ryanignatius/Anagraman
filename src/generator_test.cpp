@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "generator.h"
+#include "generator/generator.h"
 
 int main() {
 	srand(time(NULL));
