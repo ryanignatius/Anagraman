@@ -17,6 +17,7 @@ const std::string SLACK_TOKEN = "xoxb-4767970651-373663936705-GoKhJSXhjpTX06EO27
 std::unordered_map<std::string, int> userStates;
 std::unordered_map<std::string, problem> userProblems;
 std::unordered_map<std::string, game> games;
+std::unordered_map<std::string, std::string> slackPlayers;
 generator mgenerator;
 
 void sendMessageSlack(const std::string& channel, const std::string& text) {
@@ -24,6 +25,7 @@ void sendMessageSlack(const std::string& channel, const std::string& text) {
 		{ "channel", channel },
 		{ "text", text }
 	};
+
 	std::cout << j.dump() << std::endl;
 	RestClient::Connection* conn = new RestClient::Connection(SLACK_ENDPOINT);
 	conn->AppendHeader("Content-Type", "application/json; charset=utf-8");
@@ -32,9 +34,31 @@ void sendMessageSlack(const std::string& channel, const std::string& text) {
 	std::cout << resp.body << std::endl;
 }
 
+void resolveSlackPlayer(const std::string& user_id) {
+	json j = {
+		{ "user", user_id },
+		{ "token", SLACK_TOKEN }
+	};
+	std::ostringstream sout;
+	sout << "user=" << user_id << "&token=" << SLACK_TOKEN;
+	std::string payload = sout.str();
+
+	RestClient::Connection* conn = new RestClient::Connection(SLACK_ENDPOINT);
+	conn->AppendHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+	RestClient::Response resp = conn->post("/api/users.info", payload);
+	std::cout << resp.body << std::endl;
+}
+
 std::vector<std::string> getReplySlack(const json& event) {
 	std::string key = event["channel"];
 	std::string text = event["text"];
+	std::string user_id = event["user"];
+
+	if (slackPlayers.find(user_id) == slackPlayers.end()) {
+		resolveSlackPlayer(user_id);
+		// slackPlayers[user_id] = "hehe";
+		// game.add_player(user_id, "hehe");
+	}
 
 	if (text == "//play") {
 		games[key] = game();
@@ -70,6 +94,8 @@ std::vector<std::string> getReplySlack(const json& event) {
 		sout << " correct!";
 		return { sout.str() , games[key].get_next_problem() };
 	}
+
+	return { "" };
 }
 
 void sendReply(const std::string& sender, const std::string& reply) {
