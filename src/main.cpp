@@ -61,6 +61,18 @@ std::vector<std::string> getReplySlack(const json& event) {
 		slackPlayers[user_id] = name;
 	}
 
+	if (text == "//help") {
+		std::ostringstream sout;
+		sout << "`//help` to show this help message\n";
+		sout << "`//play` to start\n";
+		sout << "`//rescramble` to rescramble the question\n";
+		sout << "`//skip` to change the question\n";
+		sout << "`//leaderboard` to show the leaderboard\n";
+		sout << "`//end` to end the game\n";
+		sout << "Non-alphanumerics are ignored, so both `esteler` and `es teler` would be a correct answer for `seteler`\n";
+		return { sout.str() };
+	}
+
 	if (text == "//play") {
 		if (games.find(key) == games.end()) {
 			games[key] = game();
@@ -82,7 +94,7 @@ std::vector<std::string> getReplySlack(const json& event) {
 		return { games[key].rescramble() };
 	} else if (text == "//skip") {
 		std::ostringstream sout;
-		sout << "The answer was " << games[key].get_ground() << "\n";
+		sout << "The answer is " << games[key].get_ground() << "\n";
 		sout << "Next:";
 		return { sout.str(), games[key].get_next_problem() };
 	} else if (text == "//leaderboard") {
