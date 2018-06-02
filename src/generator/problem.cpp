@@ -25,6 +25,8 @@ bool problem::check(std::string test) {
 	std::string cground = ground;
 	cground.erase(std::remove_if(cground.begin(), cground.end(), alphanum), cground.end());
 	test.erase(std::remove_if(test.begin(), test.end(), alphanum), test.end());
+	std::transform(cground.begin(), cground.end(), cground.begin(), ::tolower);
+	std::transform(test.begin(), test.end(), test.begin(), ::tolower);
 	return cground == test;
 }
 

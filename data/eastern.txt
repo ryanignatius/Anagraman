@@ -1,20 +1,20 @@
 Brokoli Jamur Iris
 Jamur Hitam Cabe Garam
 Jamur Kering Lada Hitam
-Angsio aneka jamur
+Angsio Aneka Jamur
 Jagung Telur Asin
-Otak-otak Telur Asin
+Otak Otak Telur Asin
 Sapo Terong Ala Szechuan
 Asparagus Dengan Bawang Putih
 Asparagus Saus Tiram
 Asparagus
-Scallop Kering dan Jamur
+Scallop Kering Dan Jamur
 Bandung Baby Kailan
 Po Cai
-Pocay Siram dengan Dua Macam Telur
+Pocay Siram Dengan Dua Macam Telur
 Brokoli Bawang Putih
 Brokoli Saus Tiram
-Brokoli Siram Telur dan Daging Kepiting
+Brokoli Siram Telur Dan Daging Kepiting
 Buncis Goreng Cabe Garam
 Buncis Goreng Kering
 Buncis Telur Asin
@@ -22,26 +22,26 @@ Kapri Cah Sapi Cincang Tausi
 Kapri Bawang Putih
 Tauge Cah Ikan Asin
 Siaw Pak Coy Bawang Putih
-Siaw Pak Coy Siram Telur dan Daging Kepiting
+Siaw Pak Coy Siram Telur Dan Daging Kepiting
 Kailan Belacan
 Kailan Bawang Putih
 Kailan 2 Rasa
 Aneka Hidangan Pembuka 5 Rasa
 Aneka Hidangan Dingin
-Daging sapi Rebus dengan Kecap Garlic
-Cumi ala Thai
+Daging Sapi Rebus Dengan Kecap Garlic
+Cumi Ala Thai
 Ubur Ubur
 Soup Hisit Ayam Cincang
-Angsio Hisit dengan Telur Kepiting
+Angsio Hisit Dengan Telur Kepiting
 Soup Hisit Telur Kepiting
 Soup Hisit Daging Kepiting
 Angsio Hisit Superior
-Soup Asparagus dengan Seafood Tahu
+Soup Asparagus Dengan Seafood Tahu
 Soup Bebek
 Soup Jagung Ayam
 Soup Jagung Daging Kepiting
 Soup Ikan Special
-Soup Tom Yum dengan Seafood
+Soup Tom Yum Dengan Seafood
 Soup Asam Pedas Ala Szechuan
 Bapao Talas
 Siomay
@@ -76,38 +76,38 @@ Cakue Mayonaise Sunday
 Lumpia Durian Sunday
 Pangsit Kepiting Jepang Sunday
 Ubur Ubur Sunday
-Mun Mie Ulang Tahun dengan Telur
+Mun Mie Ulang Tahun Dengan Telur
 Mun Mie Daging Kepiting
 Mie Goreng Ulang Tahun Ala Eastern
 Mie Goreng Seafood
 Mie Kuah Seafood
 Mie Goreng Special
-Soun Lada Hitam dan Daging Kepiting
+Soun Lada Hitam Dan Daging Kepiting
 Bihun Goreng Seafood
 Kwetiau Siram Seafood Dengan Saus Oyster
-Hor Fan Cah Udang dengan Saus Telur
+Hor Fan Cah Udang Dengan Saus Telur
 Kwetiau Goreng Sapi
 Kwetiau Goreng Seafood
 Nasi Goreng Ayam Ikan Asin
 Nasi Goreng Eastern
-Nasi Goreng Seafood Saus XO
+Nasi Goreng Seafood Saus Xo
 Nasi Goreng Yan Cau
 Sapi Lada Hitam
 Sapi Iris Ala Eastern
-Bistik Sapi Tenderloin dengan Lettuce
+Bistik Sapi Tenderloin Dengan Lettuce
 Sapi Kailan
 Bebek Kung Pao
-Tumis Bebek Cincang dengan Lettuce
-Tumis Bebek Iris dengan sayuran
+Tumis Bebek Cincang Dengan Lettuce
+Tumis Bebek Iris Dengan Sayuran
 Tumis Bebek Saus Lada Hitam
-Bebek peking
-Tumis bebek dengan Tauge
+Bebek Peking
+Tumis Bebek Dengan Tauge
 Ayam Goreng Asam Manis
 Ayam Goreng Mentega
 Ayam Goreng Tepung Ala Thailand
 Ayam Cabe Merah
 Ayam Lada Hitam
-Ayam Cabe Kering dengan Kacang Mede
+Ayam Cabe Kering Dengan Kacang Mede
 Ayam Extreme Szechuan
 Ayam Saus Plum
 Ayam Cabe Rawit
@@ -120,8 +120,8 @@ Udang Goreng Cabe Garam
 Udang Mentega
 Udang Gandum
 Udang Rebus
-Udang Kari ala Eastern dengan Mantau Goreng
-Udang Tim Bawang putih
+Udang Kari Ala Eastern Dengan Mantau Goreng
+Udang Tim Bawang Putih
 Udang Goreng Mayonaise
 Udang Telur Asin
 Udang Extreme Ala Szechuan
@@ -135,7 +135,7 @@ Cumi Goreng Wijen
 Baby Squid Saus Pedas Madu
 Cumi Telur Asin
 Kodok Goreng Cabe Garam
-Kodok Goreng Bawang Putih dan Mentega
+Kodok Goreng Bawang Putih Dan Mentega
 Kodok Cah Sayur Asin
 Sapo Kodok
 Kepiting Lemburi Goreng Tepung
@@ -146,13 +146,13 @@ Ikan Malas
 Ikan Gurame
 Ikan Nila
 Goreng Kecap Asin
-Angsio dengan Saus Teow Chiew
+Angsio Dengan Saus Teow Chiew
 Dua Rasa
-Soup dengan talas
+Soup Dengan Talas
 Tim Bawang Putih
 Tim Saus Tom Yum
-Tim Saus Plum dan Cabe ala Thai
-Goreng ala Thailand
+Tim Saus Plum Dan Cabe Ala Thai
+Goreng Ala Thailand
 Gurame Telur Asin
 Gurame Saus Nyonya
 Gurame Asam Manis
@@ -162,30 +162,30 @@ Angsio Tahu Tausi
 Steam Ala Bangkok
 Dori Ala Thai
 Tahu Cabe Garam
-Tumis Lettuce dengan Tahu Cina Putih
+Tumis Lettuce Dengan Tahu Cina Putih
 Tahu Kung Pao
-Mapo Tahu dengan Sapi Cincang Pedas ala Szechuan
-Angsio Tahu dengan Rebung dan Jamur Hitam
-Sapo Tahu Ayam dan Ikan Asin
-Tahu Special dengan Jamur Shimeji
+Mapo Tahu Dengan Sapi Cincang Pedas Ala Szechuan
+Angsio Tahu Dengan Rebung Dan Jamur Hitam
+Sapo Tahu Ayam Dan Ikan Asin
+Tahu Special Dengan Jamur Shimeji
 Bebek Panggang
 Ayam Goreng Istimewa
 Ayam Kampung Rebus
 Burung Dara Goreng
 Teppan Sapi Red Wine
 Teppan Sapi Daun Bawang
-Teppan Kodok Jahe dan Daun Bawang
+Teppan Kodok Jahe Dan Daun Bawang
 Teppan Kangkung Cah Sapi
-Teppan Belut dengan Saus Tiram
+Teppan Belut Dengan Saus Tiram
 Teppan Tahu Seafood
-Scallop Brocoli Dengan Saus XO
+Scallop Brocoli Dengan Saus Xo
 Scallop Steam Tahu Tausi
-Scallop Brokoli bawang putih
+Scallop Brokoli Bawang Putih
 Scallop Goreng Kering
 Abalon Australia Utuh Saus Tiram
-Abalon Iris Saus Tiram dan Sayuran
-Jamur Hitam Saus Tiram Haisom dan Sayuran
-Sapo Haisom ala Szechuan
+Abalon Iris Saus Tiram Dan Sayuran
+Jamur Hitam Saus Tiram Haisom Dan Sayuran
+Sapo Haisom Ala Szechuan
 Fresh Orange Juice
 Strawberry Lime Kyoho
 Orange Manggo Mint
@@ -205,7 +205,7 @@ Puding Alpukat
 Puding Coklat
 Singkong Thailand
 Es Podeng
-Agar-agar Guilinggao
+Agar Agar Guilinggao
 Es Krim Goreng
 Tea
 Mint Leaf Tea
