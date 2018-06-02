@@ -12,12 +12,12 @@ class game {
 	problem current_problem;
 	generator mgenerator;
 	int score_increment = 1;
-	void add_player(const std::string&, const std::string&);
 	void increment_score(const std::string&, const int&);
 
 	public:
 	game();
 	bool answer(const std::string&, const std::string&);
+	void add_player(const std::string&, const std::string&);
 	std::string get_next_problem();
 	std::string get_problem();
 	std::vector<player> get_players();
