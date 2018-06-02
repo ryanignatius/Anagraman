@@ -7,11 +7,11 @@ player::player(const std::string& id, const std::string& name) {
 	this->display_name = name;
 }
 
-std::string player::get_id() {
+std::string player::get_id() const {
 	return id;
 }
 
-std::string player::get_display_name() {
+std::string player::get_display_name() const {
 	return (display_name.size() ? display_name : id);
 }
 

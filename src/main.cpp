@@ -1,6 +1,8 @@
 #include <unordered_map>
 #include <algorithm>
+#include <sstream>
 #include "generator/generator.h"
+#include "game/game.h"
 #include "json.hpp"
 #include "crow_all.h"
 #include "restclient-cpp/connection.h"
@@ -14,6 +16,7 @@ const std::string SLACK_TOKEN = "xoxb-4767970651-373663936705-GoKhJSXhjpTX06EO27
 
 std::unordered_map<std::string, int> userStates;
 std::unordered_map<std::string, problem> userProblems;
+std::unordered_map<std::string, game> games;
 generator mgenerator;
 
 void sendMessageSlack(const std::string& channel, const std::string& text) {
@@ -29,32 +32,44 @@ void sendMessageSlack(const std::string& channel, const std::string& text) {
 	std::cout << resp.body << std::endl;
 }
 
-std::string getReplySlack(const std::string& sender, const std::string& text) {
-    if (text == "//play") {
-        userStates[sender] = 1;
-        problem prob = mgenerator.get_problem();
-        userProblems[sender] = prob;
-        std::cout << prob.get_ground() << std::endl;
-        std::cout << prob.get_scrambled() << std::endl;
-        return prob.get_scrambled();
-    }
+std::vector<std::string> getReplySlack(const json& event) {
+	std::string key = event["channel"];
+	std::string text = event["text"];
 
-    int userState = userStates[sender];
-    if (userState == 0) {
-		return "";
-        // return "Hello.. Please type '/play' to start playing..";
-    } else if (userState == 1) {
-        problem prob = userProblems[sender];
-        if (prob.check(text)) {
-            // correct
-            userStates[sender] = 0;
-            return "Correct! Congratulations!";
-        } else {
-            // wrong
-			return "";
-            // return "Wrong.. Please try again..";
-        }
-    }
+	if (text == "//play") {
+		games[key] = game();
+		return { games[key].get_problem() };
+	}
+
+	if (games.find(key) == games.end()) {
+		return { "" };
+	}
+
+	if (text == "//leaderboard") {
+		std::vector<player> players = games[key].get_players();
+		std::ostringstream sout;
+		for (const player& p: players) {
+			sout << p.get_display_name() << " " << p.get_score() << "\n";
+		}
+		return { sout.str() };
+	} else if (text == "//end") {
+		std::vector<player> players = games[key].get_players();
+		std::ostringstream sout;
+		sout << "Cheers!\n\n";
+		sout << "Final Leaderboard:\n";
+		for (const player& p: players) {
+			sout << p.get_display_name() << " " << p.get_score() << "\n";
+		}
+		games.erase(key);
+		return { sout.str() };
+	}
+
+	if (games[key].answer(event["user"], text)) {
+		std::ostringstream sout;
+		sout << event["user"];
+		sout << " correct!";
+		return { sout.str() , games[key].get_next_problem() };
+	}
 }
 
 void sendReply(const std::string& sender, const std::string& reply) {
@@ -156,9 +171,11 @@ crow::response handlePostSlack(const crow::request& req) {
 		if (event.count("bot_id")) {
 			return crow::response(200);
 		}
-		std::string reply = getReplySlack(event["user"], event["text"]);
-		if (reply.size()) {
-			sendMessageSlack(event["channel"], reply);
+		std::vector<std::string> replies = getReplySlack(event);
+		if (replies.size()) {
+			for (const std::string& reply: replies) {
+				sendMessageSlack(event["channel"], reply);
+			}
 		}
 		return crow::response(200);
 	}
