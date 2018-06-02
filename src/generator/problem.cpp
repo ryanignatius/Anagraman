@@ -17,8 +17,15 @@ void problem::rescramble() {
 	scrambled = scramble();
 }
 
+bool alphanum(const char& c) {
+	return !(c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9');
+}
+
 bool problem::check(std::string test) {
-	return ground == test;
+	std::string cground = ground;
+	cground.erase(std::remove_if(cground.begin(), cground.end(), alphanum), cground.end());
+	test.erase(std::remove_if(test.begin(), test.end(), alphanum), test.end());
+	return cground == test;
 }
 
 std::string problem::get_ground() {
