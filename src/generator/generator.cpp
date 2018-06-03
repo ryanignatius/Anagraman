@@ -1,7 +1,7 @@
 #include "generator.h"
 
 generator::generator() : rng(time(nullptr)) {
-	source = new vector_source("./data/eastern.txt");
+	source = new vector_source("./data/sports.txt");
 }
 
 int generator::get_random_index() {
